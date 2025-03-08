@@ -9,25 +9,28 @@ class GestionInventaire:
         self.window.title("Gestion d'Inventaire pour une Petite Boutique")
         self.window.geometry("1920x1080")
         self.window.resizable(False, False)
+        self.window.config(bg="#ecf0f1")
 
         # Les zone de recherche
 
         # Zone recherche par nom
-        self.search_frame = LabelFrame(window, text="zone de recherche", font=("Arial", 12, "bold"), labelanchor="n")
-        self.search_frame.pack(fill="x", expand="yes", padx=20)
-        self.label_search = Label(self.search_frame, text="Rechercher par nom du produit:", font=("Arial", 12, "bold"))
+        self.search_frame = LabelFrame(window, text="Recherche et Filtrage", font=("Arial", 12, "bold"), labelanchor="n", bg="#ffffff")
+        self.search_frame.pack(fill="x", expand="yes", padx=20, pady=10)
+        self.label_search = Label(self.search_frame, text="Rechercher par nom du produit:", font=("Arial", 12, "bold"), bg="#ffffff")
         self.label_search.grid(row=0, column=0, padx=10, pady=10)
         self.search_entry = Entry(self.search_frame, width=150)
         self.search_entry.grid(row=0, column=1, padx=10, pady=10)
         self.search_button = Button(self.search_frame, text="Rechercher", command=self.rechercher_produit, width=30)
+        self.search_button.config(bg="#3498db", fg="white")
         self.search_button.grid(row=0, column=2, padx=10, pady=10)
 
         # Zone filtrage par category
-        self.label_filter = Label(self.search_frame, text="Filtrer par category:", font=("Arial", 12, "bold"))
+        self.label_filter = Label(self.search_frame, text="Filtrer par category:", font=("Arial", 12, "bold"), bg="#ffffff")
         self.label_filter.grid(row=1, column=0, padx=10, pady=10)
         self.filter_entry = Entry(self.search_frame, width=150)
         self.filter_entry.grid(row=1, column=1, padx=10, pady=10)
         self.filter_button = Button(self.search_frame, text="Filtrer", command=self.filtrer_produits, width=30)
+        self.filter_button.config(bg="#3498db", fg="white")
         self.filter_button.grid(row=1, column=2, padx=10, pady=10)
 
         # Tableau des produits
@@ -35,7 +38,7 @@ class GestionInventaire:
         self.tree_frame.pack(pady=10)
         self.tree_scrool = Scrollbar(self.tree_frame)
         self.tree_scrool.pack(pady=10, side=RIGHT, fill=Y)
-        self.my_tree = ttk.Treeview(self.tree_frame, yscrollcommand=self.tree_scrool.set, selectmode="extended", height=20)
+        self.my_tree = ttk.Treeview(self.tree_frame, yscrollcommand=self.tree_scrool.set, selectmode="extended")
         self.my_tree.pack(fill="x", expand=True)
         self.my_tree['columns'] = ("nom_produit", "refernce", "category", "quantity", "prix_unitaire")
         self.my_tree.column("#0", width=0, stretch=False)
@@ -44,16 +47,19 @@ class GestionInventaire:
         self.my_tree.column("category", anchor="w", width=365, minwidth=150)
         self.my_tree.column("quantity", anchor="w", width=365, minwidth=150)
         self.my_tree.column("prix_unitaire", anchor="w", width=365, minwidth=150)
+
         
         self.style = ttk.Style()
         self.style.theme_use("clam")
-        self.style.configure("Treeview",
-                            background="#7c7c7d",
-                            foreground="black",
-                            rowheight=25,
-                            fieldbackground="#7c7c7d")
-        self.style.map('Treeview', background=[('selected', '#0e43e3')])
+        self.style.configure("Treeview", foreground="black", rowheight=40)
+        self.style.map('Treeview', background=[('selected', '#3498db')])
 
+        self.my_tree.tag_configure('evenrow', background="#ffffff")
+        self.my_tree.tag_configure('oddrow', background="#ebf5fb")
+
+        self.style.configure("Treeview.Column", padding=20, font=('Arial', 12, 'bold'))
+
+        self.style.configure("Treeview.Heading", background="#3498db", foreground="#ffffff", font=('Arial', 12, 'bold'), padding=10)
         self.my_tree.heading('#0', text='', anchor='w')
         self.my_tree.heading("nom_produit", text="Nom Produit", anchor="w")
         self.my_tree.heading("refernce", text="Référence", anchor="w")
@@ -73,20 +79,38 @@ class GestionInventaire:
         # Buttons
         self.button_frame = LabelFrame(window, text="Commandes")
         self.button_frame.pack(fill="x", expand="yes", padx=45)
-        self.ajouter_button = Button(self.button_frame, text="Ajouter Produit", command=self.ajouter_produits)
+
+        self.ajouter_button = Button(self.button_frame, text="Ajouter Produit", command=self.ajouter_produits, 
+                                    fg="white", bg="#2ecc71", width=29,
+                                    activebackground="#27ae60", activeforeground="white")
         self.ajouter_button.grid(row=0, column=0, padx=20, pady=10)
-        self.modifier_button = Button(self.button_frame, text="Modifier Produit", command=self.modifier_produits)
+
+        self.modifier_button = Button(self.button_frame, text="Modifier Produit", command=self.modifier_produits, 
+                                        fg="white", bg="#3498db", width=29,
+                                        activebackground="#2980b9", activeforeground="white")
         self.modifier_button.grid(row=0, column=1, padx=20, pady=10)
-        self.supprimer_button = Button(self.button_frame, text="Supprimer Produit", command=self.supprimer_produits)
+
+        self.supprimer_button = Button(self.button_frame, text="Supprimer Produit", command=self.supprimer_produits, 
+                                        fg="white", bg="#e74c3c", width=29,
+                                        activebackground="#c0392b", activeforeground="white")
         self.supprimer_button.grid(row=0, column=2, padx=20, pady=10)
-        self.calcul_button = Button(self.button_frame, text="Calculer le résumé", command=self.calculer_resumer)
-        self.calcul_button.grid(row=0, column=3, padx=20, pady=10) 
-        self.view_product = Button(self.button_frame, text="Afficher tout les produits", command=self.load_products)
+
+        self.calcul_button = Button(self.button_frame, text="Calculer le résumé", command=self.calculer_resumer, 
+                                        fg="white", bg="#f39c12", width=29,
+                                        activebackground="#d35400", activeforeground="white")
+        self.calcul_button.grid(row=0, column=3, padx=20, pady=10)
+
+        self.view_product = Button(self.button_frame, text="Afficher tout les produits", command=self.load_products, 
+                                        fg="white", bg="#9b59b6", width=29,
+                                        activebackground="#8e44ad", activeforeground="white")
         self.view_product.grid(row=0, column=4, padx=20, pady=10)
-        self.export_button = Button(self.button_frame, text="Exporter les produits", command=self.export_products)
+
+        self.export_button = Button(self.button_frame, text="Exporter les produits", command=self.export_products, 
+                                        fg="white", bg="#34495e", width=29,
+                                        activebackground="#2c3e50", activeforeground="white")
         self.export_button.grid(row=0, column=5, padx=20, pady=10)
 
-        # Load products
+                # Load products
         self.load_products()
     # export products sous fichier csv
     def export_products(self):
@@ -116,10 +140,16 @@ class GestionInventaire:
             messagebox.showwarning("Erreur", "Category non trouver")
 
     def load_products(self):
+        global count
+        count = 0
         self.my_tree.delete(*self.my_tree.get_children())
         products = database.show_products()
         for product in products:
-            self.my_tree.insert("", "end", values=product)
+            if count % 2 == 0:
+                self.my_tree.insert("", "end", values=product, tags=("evenrow"))
+            else:
+                self.my_tree.insert("", "end", values=product, tags=("oddrow"))
+            count += 1
 
     def calculer_resumer(self):
         products = database.show_products()
@@ -153,9 +183,9 @@ class GestionInventaire:
         new_window.title("Supprimer un produit")
         new_window.geometry("300x80")
         new_window.resizable(False, False)
-        button_valider = tk.Button(new_window, text="Valider", command=valider)
+        button_valider = tk.Button(new_window, text="Valider", command=valider, bg="#2ecc71", fg="white", activebackground="#27ae60", activeforeground="white")
         button_valider.grid(row=0, column=0, pady=20, padx=50)
-        button_annuler = tk.Button(new_window, text="Annuler", command=annuler)
+        button_annuler = tk.Button(new_window, text="Annuler", command=annuler, bg="#e74c3c", fg="white", activebackground="#c0392b", activeforeground="white")
         button_annuler.grid(row=0, column=1)
 
     def modifier_produits(self):
@@ -216,6 +246,5 @@ class GestionInventaire:
             new_window.destroy()
             messagebox.showinfo("Succès", "Produit ajouté avec succès")    
 
-        button_valider = tk.Button(new_window, text="Valider", command=valider)
+        button_valider = tk.Button(new_window, text="Valider", command=valider, bg="#2ecc71", fg="white", activebackground="#27ae60", activeforeground="white")
         button_valider.pack()
-            
