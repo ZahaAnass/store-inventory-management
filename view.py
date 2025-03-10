@@ -9,7 +9,7 @@ class GestionInventaire:
         self.window.title("Gestion d'Inventaire pour une Petite Boutique")
         self.window.geometry("1920x1080")
         self.window.resizable(False, False)
-        self.window.config(bg="#ecf0f1")
+        self.window.config(bg="#87CEEB")
 
         # Les zone de recherche
 
@@ -21,7 +21,7 @@ class GestionInventaire:
         self.search_entry = Entry(self.search_frame, width=150)
         self.search_entry.grid(row=0, column=1, padx=10, pady=10)
         self.search_button = Button(self.search_frame, text="Rechercher", command=self.rechercher_produit, width=30)
-        self.search_button.config(bg="#3498db", fg="white", activebackground="#2980b9", activeforeground="white")
+        self.search_button.config(bg="#3498db", fg="white", activebackground="#2980b9", activeforeground="white", font=("Arial", 12, "bold"))
         self.search_button.grid(row=0, column=2, padx=10, pady=10)
         
         # Zone filtrage par category
@@ -30,7 +30,7 @@ class GestionInventaire:
         self.filter_entry = Entry(self.search_frame, width=150)
         self.filter_entry.grid(row=1, column=1, padx=10, pady=10)
         self.filter_button = Button(self.search_frame, text="Filtrer", command=self.filtrer_produits, width=30)
-        self.filter_button.config(bg="#3498db", fg="white", activebackground="#2980b9", activeforeground="white")
+        self.filter_button.config(bg="#3498db", fg="white", activebackground="#2980b9", activeforeground="white", font=("Arial", 12, "bold"))
         self.filter_button.grid(row=1, column=2, padx=10, pady=10)
 
         # Tableau des produits
@@ -52,7 +52,7 @@ class GestionInventaire:
         
         self.style = ttk.Style()
         self.style.theme_use("clam")
-        self.style.configure("Treeview", foreground="black", rowheight=50)
+        self.style.configure("Treeview", foreground="black", rowheight=45)
         self.style.map('Treeview', background=[('selected', '#3498db')])
 
         self.my_tree.tag_configure('evenrow', background="#ffffff")
@@ -84,32 +84,32 @@ class GestionInventaire:
         self.button_frame.pack(fill="x", expand="yes", padx=40)
 
         self.ajouter_button = Button(self.button_frame, text="Ajouter Produit", command=self.ajouter_produits, 
-                                    fg="white", bg="#2ecc71", width=29,
+                                    fg="white", bg="#2ecc71", width=26, font=("Arial", 12, "bold"),
                                     activebackground="#27ae60", activeforeground="white")
         self.ajouter_button.grid(row=0, column=0, padx=20, pady=10)
 
         self.modifier_button = Button(self.button_frame, text="Modifier Produit", command=self.modifier_produits, 
-                                        fg="white", bg="#3498db", width=29,
+                                        fg="white", bg="#3498db", width=26, font=("Arial", 12, "bold"),
                                         activebackground="#2980b9", activeforeground="white")
         self.modifier_button.grid(row=0, column=1, padx=20, pady=10)
 
         self.supprimer_button = Button(self.button_frame, text="Supprimer Produit", command=self.supprimer_produits, 
-                                        fg="white", bg="#e74c3c", width=29,
+                                        fg="white", bg="#e74c3c", width=26, font=("Arial", 12, "bold"),
                                         activebackground="#c0392b", activeforeground="white")
         self.supprimer_button.grid(row=0, column=2, padx=20, pady=10)
 
         self.calcul_button = Button(self.button_frame, text="Calculer le résumé", command=self.calculer_resumer, 
-                                        fg="white", bg="#f39c12", width=29,
+                                        fg="white", bg="#f39c12", width=26, font=("Arial", 12, "bold"),
                                         activebackground="#d35400", activeforeground="white")
         self.calcul_button.grid(row=0, column=3, padx=20, pady=10)
 
         self.view_product = Button(self.button_frame, text="Afficher tout les produits", command=self.load_products, 
-                                        fg="white", bg="#9b59b6", width=29,
+                                        fg="white", bg="#9b59b6", width=26, font=("Arial", 12, "bold"),
                                         activebackground="#8e44ad", activeforeground="white")
         self.view_product.grid(row=0, column=4, padx=20, pady=10)
 
         self.export_button = Button(self.button_frame, text="Exporter les produits", command=self.export_products, 
-                                        fg="white", bg="#34495e", width=29,
+                                        fg="white", bg="#34495e", width=26, font=("Arial", 12, "bold"),
                                         activebackground="#2c3e50", activeforeground="white")
         self.export_button.grid(row=0, column=5, padx=20, pady=10)
 
