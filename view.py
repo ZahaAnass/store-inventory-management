@@ -15,7 +15,7 @@ class GestionInventaire:
 
         # Zone recherche par nom
         self.search_frame = LabelFrame(window, text="Recherche et Filtrage", font=("Arial", 12, "bold"), labelanchor="n", bg="#ffffff")
-        self.search_frame.pack(fill="x", expand="yes", padx=20, pady=10)
+        self.search_frame.pack(fill="x", padx=40, pady=80)
         self.label_search = Label(self.search_frame, text="Rechercher par nom du produit:", font=("Arial", 12, "bold"), bg="#ffffff")
         self.label_search.grid(row=0, column=0, padx=10, pady=10)
         self.search_entry = Entry(self.search_frame, width=150)
@@ -23,7 +23,7 @@ class GestionInventaire:
         self.search_button = Button(self.search_frame, text="Rechercher", command=self.rechercher_produit, width=30)
         self.search_button.config(bg="#3498db", fg="white")
         self.search_button.grid(row=0, column=2, padx=10, pady=10)
-
+        
         # Zone filtrage par category
         self.label_filter = Label(self.search_frame, text="Filtrer par category:", font=("Arial", 12, "bold"), bg="#ffffff")
         self.label_filter.grid(row=1, column=0, padx=10, pady=10)
@@ -39,9 +39,10 @@ class GestionInventaire:
         self.tree_scrool = Scrollbar(self.tree_frame)
         self.tree_scrool.pack(pady=10, side=RIGHT, fill=Y)
         self.my_tree = ttk.Treeview(self.tree_frame, yscrollcommand=self.tree_scrool.set, selectmode="extended")
+        self.tree_scrool.config(command=self.my_tree.yview)
         self.my_tree.pack(fill="x", expand=True)
         self.my_tree['columns'] = ("nom_produit", "refernce", "category", "quantity", "prix_unitaire")
-        self.my_tree.column("#0", width=0, stretch=False)
+        self.my_tree.column("#0", width=0, minwidth=0, stretch=NO)
         self.my_tree.column("nom_produit", anchor="w", width=365, minwidth=150)
         self.my_tree.column("refernce", anchor="w", width=365, minwidth=150)
         self.my_tree.column("category", anchor="w", width=365, minwidth=150)
@@ -51,7 +52,7 @@ class GestionInventaire:
         
         self.style = ttk.Style()
         self.style.theme_use("clam")
-        self.style.configure("Treeview", foreground="black", rowheight=40)
+        self.style.configure("Treeview", foreground="black", rowheight=50)
         self.style.map('Treeview', background=[('selected', '#3498db')])
 
         self.my_tree.tag_configure('evenrow', background="#ffffff")
@@ -76,9 +77,11 @@ class GestionInventaire:
         # self.grid_frame.columnconfigure(1, weight=2)
         # self.grid_frame.columnconfigure(2, weight=1)
 
+
+
         # Buttons
-        self.button_frame = LabelFrame(window, text="Commandes")
-        self.button_frame.pack(fill="x", expand="yes", padx=45)
+        self.button_frame = LabelFrame(window, text="Commandes", background="#ffffff", font=("Arial", 12, "bold"))
+        self.button_frame.pack(fill="x", expand="yes", padx=40)
 
         self.ajouter_button = Button(self.button_frame, text="Ajouter Produit", command=self.ajouter_produits, 
                                     fg="white", bg="#2ecc71", width=29,
@@ -110,7 +113,7 @@ class GestionInventaire:
                                         activebackground="#2c3e50", activeforeground="white")
         self.export_button.grid(row=0, column=5, padx=20, pady=10)
 
-                # Load products
+        # Load products
         self.load_products()
     # export products sous fichier csv
     def export_products(self):
