@@ -21,7 +21,7 @@ class GestionInventaire:
         self.search_entry = Entry(self.search_frame, width=150)
         self.search_entry.grid(row=0, column=1, padx=10, pady=10)
         self.search_button = Button(self.search_frame, text="Rechercher", command=self.rechercher_produit, width=30)
-        self.search_button.config(bg="#3498db", fg="white")
+        self.search_button.config(bg="#3498db", fg="white", activebackground="#2980b9", activeforeground="white")
         self.search_button.grid(row=0, column=2, padx=10, pady=10)
         
         # Zone filtrage par category
@@ -30,7 +30,7 @@ class GestionInventaire:
         self.filter_entry = Entry(self.search_frame, width=150)
         self.filter_entry.grid(row=1, column=1, padx=10, pady=10)
         self.filter_button = Button(self.search_frame, text="Filtrer", command=self.filtrer_produits, width=30)
-        self.filter_button.config(bg="#3498db", fg="white")
+        self.filter_button.config(bg="#3498db", fg="white", activebackground="#2980b9", activeforeground="white")
         self.filter_button.grid(row=1, column=2, padx=10, pady=10)
 
         # Tableau des produits
@@ -184,7 +184,7 @@ class GestionInventaire:
 
         new_window = Toplevel(self.window)
         new_window.title("Supprimer un produit")
-        new_window.geometry("300x80")
+        new_window.geometry("300x80+800+550")
         new_window.resizable(False, False)
         button_valider = tk.Button(new_window, text="Valider", command=valider, bg="#2ecc71", fg="white", activebackground="#27ae60", activeforeground="white")
         button_valider.grid(row=0, column=0, pady=20, padx=50)
@@ -202,24 +202,24 @@ class GestionInventaire:
     def window_product(self, title, product=None):
         new_window = Toplevel(self.window)
         new_window.title(title)
-        new_window.geometry("400x400")
+        new_window.geometry("400x450+750+400")
         new_window.resizable(False, False)
 
         tk.Label(new_window, text="Nom du produit:").pack()
-        product_name = Entry(new_window)
-        product_name.pack()
+        product_name = Entry(new_window, font=("Arial", 12))
+        product_name.pack(fill="x", pady=10, padx=10)
         tk.Label(new_window, text="Référence:").pack()
-        product_reference = Entry(new_window)
-        product_reference.pack()
+        product_reference = Entry(new_window, font=("Arial", 12))
+        product_reference.pack(fill="x", pady=10, padx=10)
         tk.Label(new_window, text="Catégorie:").pack()
-        product_category = Entry(new_window)
-        product_category.pack()
+        product_category = Entry(new_window, font=("Arial", 12))
+        product_category.pack(fill="x", pady=10, padx=10)
         tk.Label(new_window, text="Quantité:").pack()
-        product_quantity = Entry(new_window)
-        product_quantity.pack()
+        product_quantity = Entry(new_window, font=("Arial", 12))
+        product_quantity.pack(fill="x", pady=10, padx=10)
         tk.Label(new_window, text="Prix unitaire:").pack()
-        product_price = Entry(new_window)
-        product_price.pack()
+        product_price = Entry(new_window, font=("Arial", 12))
+        product_price.pack(fill="x", pady=10, padx=10)
 
         if product is not None:
             product_name.insert(0, product[0])
@@ -250,4 +250,6 @@ class GestionInventaire:
             messagebox.showinfo("Succès", "Produit ajouté avec succès")    
 
         button_valider = tk.Button(new_window, text="Valider", command=valider, bg="#2ecc71", fg="white", activebackground="#27ae60", activeforeground="white")
-        button_valider.pack()
+        button_valider.pack(fill="x", padx=10, pady=10)
+        button_annuler = tk.Button(new_window, text="Annuler", command=new_window.destroy, bg="#e74c3c", fg="white", activebackground="#c0392b", activeforeground="white")
+        button_annuler.pack(fill="x", padx=10, pady=10)
