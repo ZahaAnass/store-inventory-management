@@ -54,6 +54,9 @@ class GestionInventaire:
         self.style.theme_use("clam")
         self.style.configure("Treeview", foreground="black", rowheight=45)
         self.style.map('Treeview', background=[('selected', '#3498db')])
+        self.style.map("Treeview.Heading",
+                        background=[('active', '#2980b9'), ('selected', '#2980b9')],
+                        foreground=[('active', '#ffffff')])
 
         self.my_tree.tag_configure('evenrow', background="#ffffff")
         self.my_tree.tag_configure('oddrow', background="#ebf5fb")
@@ -69,15 +72,40 @@ class GestionInventaire:
         self.my_tree.heading("prix_unitaire", text="Prix Unitaire", anchor="w")
         self.my_tree.pack(fill="both", expand=True)
 
-        # # Grid Frame
-        # self.grid_frame = Frame(window)
-        # self.grid_frame.grid(row=1, column=0, padx=20, pady=10, columnspan=3, sticky="ew")
-
-        # self.grid_frame.columnconfigure(0, weight=1)
-        # self.grid_frame.columnconfigure(1, weight=2)
-        # self.grid_frame.columnconfigure(2, weight=1)
-
-
+        # Configure headings with commands
+        self.my_tree.heading('#0', text='', anchor='w')
+        self.my_tree.heading("nom_produit", text="Nom Produit", anchor="w", 
+                            command=lambda: sort_column("nom_produit"))
+        self.my_tree.heading("refernce", text="Référence", anchor="w", 
+                            command=lambda: sort_column("refernce"))
+        self.my_tree.heading("category", text="Catégorie", anchor="w", 
+                            command=lambda: sort_column("category"))
+        self.my_tree.heading("quantity", text="Quantité", anchor="w", 
+                            command=lambda: sort_column("quantity"))
+        self.my_tree.heading("prix_unitaire", text="Prix Unitaire", anchor="w", 
+                            command=lambda: sort_column("prix_unitaire"))
+        
+        
+        # Sort column function
+        self.last_clicked = None
+        self.click_count = None
+        def sort_column(clicked):
+            global count
+            count = 0
+            if self.last_clicked != clicked:
+                self.click_count = 0
+                self.last_clicked = clicked
+            self.click_count += 1
+            order = "DESC" if self.click_count % 2 == 0 else "ASC"
+            self.my_tree.delete(*self.my_tree.get_children())
+            products = database.sort_products(clicked, order)
+            for product in products:
+                if count % 2 == 0:
+                    self.my_tree.insert("", "end", values=product, tags=("evenrow"))
+                else:
+                    self.my_tree.insert("", "end", values=product, tags=("oddrow"))
+                count += 1
+            self.last_clicked = clicked
 
         # Buttons
         self.button_frame = LabelFrame(window, text="Commandes", background="#ffffff", font=("Arial", 12, "bold"))

@@ -60,3 +60,11 @@ def show_products():
     products = cursor.fetchall()
     conn.close()
     return products
+
+def sort_products(clicked, order):
+    conn = sqlite3.connect("inventaire.db")
+    cursor = conn.cursor()
+    cursor.execute(f"select * from products order by {clicked} {order}")
+    products = cursor.fetchall()
+    conn.close()
+    return products
