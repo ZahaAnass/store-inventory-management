@@ -5,7 +5,7 @@ def create_table():
     cursor = conn.cursor()
     cursor.execute("""create table if not exists products (
         nom_produit text primary key,
-        refernce text unique not null,
+        reference text unique not null,
         category text not null,
         quantity integer not null,
         prix_unitaire real not null
@@ -29,20 +29,20 @@ def get_product_by_category(category):
     conn.close()
     return products
 
-def ajouter_produits(nom_produit, refernce, category, quantity, prix_unitaire):
+def ajouter_produits(nom_produit, reference, category, quantity, prix_unitaire):
     conn = sqlite3.connect("inventaire.db")
     cursor = conn.cursor()
-    cursor.execute("insert into products (nom_produit, refernce, category, quantity, prix_unitaire) values (?, ?, ?, ?, ?)",
-                    (nom_produit, refernce, category, quantity, prix_unitaire))
+    cursor.execute("insert into products (nom_produit, reference, category, quantity, prix_unitaire) values (?, ?, ?, ?, ?)",
+                    (nom_produit, reference, category, quantity, prix_unitaire))
     conn.commit()
     conn.close()
 
-def modifier_produit(nom_produit, refernce, category, quantity, prix_unitaire):
+def modifier_produit(nom_produit, reference, category, quantity, prix_unitaire):
     conn = sqlite3.connect("inventaire.db")
     cursor = conn.cursor()
     cursor.execute("""
-        update products set refernce=?, category=?, quantity=?, prix_unitaire=? where nom_produit=?"""
-        , (refernce, category, quantity, prix_unitaire, nom_produit))
+        update products set reference=?, category=?, quantity=?, prix_unitaire=? where nom_produit=?"""
+        , (reference, category, quantity, prix_unitaire, nom_produit))
     conn.commit()
     conn.close()
 
