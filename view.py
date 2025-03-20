@@ -41,10 +41,10 @@ class GestionInventaire:
         self.my_tree = ttk.Treeview(self.tree_frame, yscrollcommand=self.tree_scrool.set, selectmode="extended")
         self.tree_scrool.config(command=self.my_tree.yview)
         self.my_tree.pack(fill="x", expand=True)
-        self.my_tree['columns'] = ("nom_produit", "refernce", "category", "quantity", "prix_unitaire")
+        self.my_tree['columns'] = ("nom_produit", "reference", "category", "quantity", "prix_unitaire")
         self.my_tree.column("#0", width=0, minwidth=0, stretch=NO)
         self.my_tree.column("nom_produit", anchor="w", width=365, minwidth=150)
-        self.my_tree.column("refernce", anchor="w", width=365, minwidth=150)
+        self.my_tree.column("reference", anchor="w", width=365, minwidth=150)
         self.my_tree.column("category", anchor="w", width=365, minwidth=150)
         self.my_tree.column("quantity", anchor="w", width=365, minwidth=150)
         self.my_tree.column("prix_unitaire", anchor="w", width=365, minwidth=150)
@@ -66,7 +66,7 @@ class GestionInventaire:
         self.style.configure("Treeview.Heading", background="#3498db", foreground="#ffffff", font=('Arial', 12, 'bold'), padding=10)
         self.my_tree.heading('#0', text='', anchor='w')
         self.my_tree.heading("nom_produit", text="Nom Produit", anchor="w")
-        self.my_tree.heading("refernce", text="Référence", anchor="w")
+        self.my_tree.heading("reference", text="Référence", anchor="w")
         self.my_tree.heading("category", text="Catégorie", anchor="w")
         self.my_tree.heading("quantity", text="Quantité", anchor="w")
         self.my_tree.heading("prix_unitaire", text="Prix Unitaire", anchor="w")
@@ -76,8 +76,8 @@ class GestionInventaire:
         self.my_tree.heading('#0', text='', anchor='w')
         self.my_tree.heading("nom_produit", text="Nom Produit", anchor="w", 
                             command=lambda: sort_column("nom_produit"))
-        self.my_tree.heading("refernce", text="Référence", anchor="w", 
-                            command=lambda: sort_column("refernce"))
+        self.my_tree.heading("reference", text="Référence", anchor="w", 
+                            command=lambda: sort_column("reference"))
         self.my_tree.heading("category", text="Catégorie", anchor="w", 
                             command=lambda: sort_column("category"))
         self.my_tree.heading("quantity", text="Quantité", anchor="w", 
@@ -131,7 +131,7 @@ class GestionInventaire:
                                         activebackground="#d35400", activeforeground="white")
         self.calcul_button.grid(row=0, column=3, padx=20, pady=10)
 
-        self.view_product = Button(self.button_frame, text="Afficher tout les produits", command=self.load_products, 
+        self.view_product = Button(self.button_frame, text="Afficher tous les produits", command=self.load_products, 
                                         fg="white", bg="#9b59b6", width=26, font=("Arial", 12, "bold"),
                                         activebackground="#8e44ad", activeforeground="white")
         self.view_product.grid(row=0, column=4, padx=20, pady=10)
@@ -208,7 +208,7 @@ class GestionInventaire:
 
         def annuler():
             new_window.destroy()
-            messagebox.showinfo("Succès", "Produit n'est pas supprimer")
+            messagebox.showinfo("Succès", "Produit n'est pas supprimé")
 
         new_window = Toplevel(self.window)
         new_window.title("Supprimer un produit")
@@ -257,25 +257,42 @@ class GestionInventaire:
             product_price.insert(0, product[4])
 
         def valider():
-            if product:
-                database.modifier_produit(
-                    product_name.get(),
-                    product_reference.get(),
-                    product_category.get(),
-                    int(product_quantity.get()),
-                    float(product_price.get())
-                )
-            else:
-                database.ajouter_produits(
-                    product_name.get(),
-                    product_reference.get(),
-                    product_category.get(),
-                    int(product_quantity.get()),
-                    float(product_price.get())
-                )
-            self.load_products()
-            new_window.destroy()
-            messagebox.showinfo("Succès", "Produit ajouté avec succès")    
+            try:
+                if not product_name.get() or not product_reference.get() or not product_category.get() or not product_price.get() or not product_quantity.get():
+                    messagebox.showwarning("Error", "Tous les champs sont obligatoires")
+                    return
+
+                try:
+                    quantity = int(product_quantity.get())
+                    price = float(product_price.get())
+                    if quantity < 0 or price < 0:
+                        raise ValueError("Les valeur doivent etre posotive")
+                except ValueError:
+                    messagebox.showwarning("Error", "La quantite doit etre un nombre entier et le prix un nombre positif")
+                    return
+
+                if product:
+                    database.modifier_produit(
+                        product_name.get(),
+                        product_reference.get(),
+                        product_category.get(),
+                        int(product_quantity.get()),
+                        float(product_price.get())
+                    )
+                else:
+                    database.ajouter_produits(
+                        product_name.get(),
+                        product_reference.get(),
+                        product_category.get(),
+                        int(product_quantity.get()),
+                        float(product_price.get())
+                    )
+                self.load_products()
+                new_window.destroy()
+                messagebox.showinfo("Succès", "Produit ajouté avec succès")    
+            except Exception as error:
+                messagebox.showerror("Erreur", f"Une erreur est survenue: {str(error)}")
+
 
         button_valider = tk.Button(new_window, text="Valider", command=valider, bg="#2ecc71", fg="white", activebackground="#27ae60", activeforeground="white")
         button_valider.pack(fill="x", padx=10, pady=10)
