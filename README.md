@@ -12,7 +12,7 @@ A desktop application for managing the inventory of a small retail shop. Built w
 - Data persisted in a local SQLite database
 - User-friendly GUI built with Tkinter
 
-## Getting Started
+## Getting Started 
 
 ### Prerequisites
 - Python 3.x
